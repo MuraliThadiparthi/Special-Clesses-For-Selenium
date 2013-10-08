@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<Users_Table>
+  <User>
+    <Name>Александр</Name>
+    <MiddleName>Иванович</MiddleName>
+    <SurName>Иванов</SurName>
+    <EMail>testemailwab-00@mail.ru</EMail>
+    <EMailPassword>qwerty1!</EMailPassword>
+    <Firm>apple1</Firm>
+    <RealPassword></RealPassword>
+  </User>
+  <User>
+    <Name>Петр</Name>
+    <MiddleName>Александрович</MiddleName>
+    <SurName>Сидоренко</SurName>
+    <EMail>at@gg.com</EMail>
+    <EMailPassword>qwerty1!</EMailPassword>
+    <Firm>apple2</Firm>
+    <RealPassword></RealPassword>
+  </User>
+</Users_Table>

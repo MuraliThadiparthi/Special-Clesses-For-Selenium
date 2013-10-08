@@ -1,0 +1,296 @@
+﻿/// <summary>
+        ///  Тестовый метод.
+        ///  Создает новго сотрудника.
+        /// </summary>
+        /// <returns>Пустое значение</returns>
+[Test]
+        public void FailTestCreateNUsers([Values(5)] int Count)
+        {
+            //const int Count = 5;
+            TryWebDriver();
+            Assert.Fail("Test Fail!");
+            
+            globaluser.SetData("mo@int", "111111");
+            LogIn(globaluser);
+
+            UserNames names = new UserNames();
+            
+            Random rand = new Random();
+            int salt = 0;      
+
+            string name = "";
+            for (int i = 0; i < Count; ++i)
+            {
+                salt = rand.Next(0, names.users.Count);
+                name = names.users[salt].Name + names.users[salt].MiddleName + names.users[salt].SurName 
+                    + rand.Next(0, Int32.MaxValue);
+            }
+
+            LogOut(globaluser.UserFullName);
+        }
+
+
+[Test]
+        public void TryMakeOrganization([Values("4")] string typeOfPlan)
+        {
+            TryWebDriver();
+
+            UserNames names = new UserNames();
+            /*foreach (var user in names.users)
+            {
+                string email = user.EMail;
+            }*/
+            var timeUser = names.users[0];
+            string pswd = "111111";
+            string planButton = "span.tp" + typeOfPlan + "-butt";
+
+            GoToPage("http://mail.ru");
+            Assert.AreEqual("Mail.Ru: почта, поиск в интернете, новости, игры, развлечения", Driver.Title);
+            Driver.FindElement(By.Id("mailbox__login")).SendKeys(timeUser.EMail);
+            Driver.FindElement(By.Id("mailbox__password")).SendKeys(timeUser.PasswordEmail);
+            Driver.FindElement(By.Id("mailbox__auth__button")).Click();
+
+            Assert.AreEqual("Входящие", Driver.FindElement(By.Id("id-folder-name")).Text);
+
+            GoToMainPage();
+            if(IsIn())
+                Assert.Fail("Вы залогинены.");
+            Driver.FindElement(By.LinkText("Регистрация")).Click();
+            Assert.AreEqual("Добро пожаловать на страницу подачи заявки на регистрацию предприятия!", Driver.Title);
+            Driver.FindElement(By.Id("Company")).SendKeys(timeUser.Firm);
+            Driver.FindElement(By.Id("CompanyCode")).SendKeys(timeUser.Firm);
+            Driver.FindElement(By.Id("Email")).Click();
+            Driver.FindElement(By.Id("Email")).SendKeys(timeUser.EMail);
+            Driver.FindElement(By.LinkText("Далее")).Click();
+            
+            //TODO
+            //Либо проверять по css красный цвет
+            Assert.IsTrue(IsElementPresent(By.CssSelector("span.field-validation-error > span")), 
+                "Есть ошибки при вводе данных пункта 1.");
+
+            Assert.IsTrue(IsElementPresent(By.LinkText("Назад")), "Есть ошибки при вводе данных пункта 1.");
+            Assert.IsTrue(IsElementPresent(By.LinkText("Далее")), "Есть ошибки при вводе данных пункта 1.");
+
+
+            Driver.FindElement(By.Id("UserSurname")).SendKeys(timeUser.SurName);
+            Driver.FindElement(By.Id("UserName")).SendKeys(timeUser.Name);
+            Driver.FindElement(By.Id("UserFatherName")).SendKeys(timeUser.MiddleName);
+            Driver.FindElement(By.Id("Phone1")).SendKeys(pswd);
+            Driver.FindElement(By.LinkText("Далее")).Click();
+            Assert.IsTrue(IsElementPresent(By.CssSelector("span.field-validation-error > span")), 
+                "Есть ошибки при вводе данных пункта 1.");
+
+            Assert.IsTrue(IsElementPresent(By.LinkText("Назад")));
+            Assert.IsTrue(IsElementPresent(By.LinkText("Отправить заявку")));
+            //Надпись
+            
+            ((IJavaScriptExecutor)Driver).ExecuteScript(
+                "window.getComputedStyle(window.document.getElementById('Email'),null).getPropertyValue('outline');"
+                );
+
+            Assert.AreEqual("Четыре тарифных плана на любой вкус и цвет, попробуйте и выберите себе самый оптимальный и выгодный.", 
+                Driver.FindElement(By.CssSelector("h2.tp-title")).Text);
+            Assert.IsTrue(IsElementPresent(By.CssSelector("h2.tp-title")));
+            Assert.IsTrue(IsElementPresent(By.CssSelector("h3.tp4-h")), "Есть ошибки при вводе данных пункта 2.");
+            Driver.FindElement(By.CssSelector(planButton)).Click();
+            
+            /*for (int second = 0; ; second++)
+            {
+                if (second >= 60) Assert.Fail("timeout");
+                try
+                {
+                    if ("Выбор дополнительных опций тарифного плана" == driver.FindElement(By.CssSelector("#info-change-window-284 > div.t-window-titlebar.t-header > span.t-window-title")).Text) break;
+                }
+                catch (Exception)
+                { }
+                Thread.Sleep(1000);
+            }
+            Assert.IsTrue(IsElementPresent(By.CssSelector("#info-change-window-284 > div.t-window-titlebar.t-header > span.t-window-title")));
+            for (int second = 0; ; second++)
+            {
+                if (second >= 60) Assert.Fail("timeout");
+                try
+                {
+                    if ("Корпоративный" == driver.FindElement(By.CssSelector("#info-change-window-284 > div.t-window-content.t-content > div.tar-plan > h1.tar-plan-label > span.tar-plan-name")).Text) break;
+                }
+                catch (Exception)
+                { }
+                Thread.Sleep(1000);
+            }
+            try
+            {
+                Assert.IsTrue(IsElementPresent(By.CssSelector("#info-change-window-284 > div.t-window-content.t-content > div.tar-plan > h1.tar-plan-label > span.tar-plan-name")));
+            }
+            catch (AssertionException e)
+            {
+                verificationErrors.Append(e.Message);
+            }
+            driver.FindElement(By.XPath("(//a[contains(text(),'Сохранить')])[4]")).Click();
+            for (int second = 0; ; second++)
+            {
+                if (second >= 60) Assert.Fail("timeout");
+                try
+                {
+                    if (IsElementPresent(By.CssSelector("h2.tp-title"))) break;
+                }
+                catch (Exception)
+                { }
+                Thread.Sleep(1000);
+            }
+            driver.FindElement(By.LinkText("Отправить заявку")).Click();
+            Assert.AreEqual("Запрос на регистрацию предприятия успешно создан", driver.Title);
+            for (int second = 0; ; second++)
+            {
+                if (second >= 60) Assert.Fail("timeout");
+                try
+                {
+                    if ("На ваш адрес электронной почты выслана ссылка для подтверждения заявки на регистрацию." == driver.FindElement(By.CssSelector("#content > h2")).Text) break;
+                }
+                catch (Exception)
+                { }
+                Thread.Sleep(1000);
+            }
+            Assert.IsTrue(IsElementPresent(By.CssSelector("#content > h2")));
+            Assert.AreEqual("Mail.Ru: почта, поиск в интернете, новости, игры, развлечения", driver.Title);
+           
+            Assert.IsTrue(IsElementPresent(By.CssSelector("span.mailbox__title__link__text")));
+           
+            driver.FindElement(By.CssSelector("span.mailbox__title__link__text")).Click();
+            Assert.AreEqual("(2) Входящие - testemailwab-00@mail.ru - Почта Mail.Ru", driver.Title);
+            driver.FindElement(By.CssSelector("span.messageline__body__name")).Click();
+            driver.FindElement(By.Id("chb13766424160000000464")).Click();
+            
+            driver.FindElement(By.Id("chb13766424160000000464")).Click();
+            
+            driver.FindElement(By.Id("chb13766424160000000464")).Click();
+            
+            driver.FindElement(By.CssSelector("label.messageline__checkbox")).Click();
+           
+            for (int second = 0; ; second++)
+            {
+                if (second >= 60) Assert.Fail("timeout");
+                try
+                {
+                    if ("WORKABOX.МАГАЗИН. Проверка почты!" == driver.FindElement(By.CssSelector("span.messageline__body__subject")).Text) break;
+                }
+                catch (Exception)
+                { }
+                Thread.Sleep(1000);
+            }
+
+            driver.FindElement(By.CssSelector("span.messageline__body__subject")).Click();
+           
+            for (int second = 0; ; second++)
+            {
+                if (second >= 60) Assert.Fail("timeout");
+                try
+                {
+                    if (IsElementPresent(By.LinkText("http://beta/SaaS21/Account/EmailVerifying?ticket=87CADBD6AE362E055306AAC0C40A8D475D5FEBFC5A14FF42A4140B916F3B6C9B965A1D11CB79553C55AF1A2656139EF79C6647ED9FDC4F98E0745D00D1FC1C10123CF6B6ACA8EC6F0B8DD599E911B3E9"))) break;
+                }
+                catch (Exception)
+                { }
+                Thread.Sleep(1000);
+            }
+         
+            driver.FindElement(By.LinkText("http://beta/SaaS21/Account/EmailVerifying?ticket=87CADBD6AE362E055306AAC0C40A8D475D5FEBFC5A14FF42A4140B916F3B6C9B965A1D11CB79553C55AF1A2656139EF79C6647ED9FDC4F98E0745D00D1FC1C10123CF6B6ACA8EC6F0B8DD599E911B3E9")).Click();
+            for (int second = 0; ; second++)
+            {
+                if (second >= 60) Assert.Fail("timeout");
+                try
+                {
+                    if ("Логин" == driver.FindElement(By.CssSelector("label")).Text) break;
+                }
+                catch (Exception)
+                { }
+                Thread.Sleep(1000);
+            }
+            driver.FindElement(By.Id("NewLogin")).SendKeys("mo");
+            driver.FindElement(By.Id("NewPassword")).SendKeys("111111");
+            driver.FindElement(By.Id("ConfirmPassword")).SendKeys("111111");
+            driver.FindElement(By.LinkText("Зарегистрироваться")).Click();
+            Assert.AreEqual("Добро пожаловать!", driver.Title);
+            try
+            {
+                Assert.AreEqual("Поздравляем! Вы успешно зарегистрировались. После окончания развертывания на Ваш e-mail будет выслано информационное письмо.", driver.FindElement(By.CssSelector("#content > h2")).Text);
+            }
+            catch (AssertionException e)
+            {
+                verificationErrors.Append(e.Message);
+            }
+            Assert.AreEqual("Не удалось найти данный ресурс.", driver.Title);
+           
+            driver.FindElement(By.CssSelector("span.menu__item__link__text.menu__item__link__text_linear")).Click();
+          
+            driver.FindElement(By.CssSelector("span.menu__item__link__text.menu__item__link__text_linear")).Click();
+          
+            Assert.IsTrue(IsElementPresent(By.CssSelector("i.messageline__fade.messageline__fade_name")));
+          
+            driver.FindElement(By.CssSelector("span.messageline__body__subject")).Click();
+           
+            driver.FindElement(By.LinkText("http://store.workabox.ru")).Click();
+           
+            try
+            {
+                Assert.AreEqual("Здравствуйте, Andrey Petrovich!\n \n Поздравляем, предприятие ‘intel’ было успешно создано и Вы можете приступить к работе!\n Для этого перейдите по адресу http://store.workabox.ru и войдите в систему, используя Ваш логин: mo@intel\n \n Если у Вас есть какие-либо вопросы, то Вы можете задать их на нашем портале http://workabox.copiny.com/\n \n С наилучшими пожеланиями, \n Команда WORKABOX \n http://www.workabox.ru", driver.FindElement(By.Id("style_13766426230000000562_BODY")).Text);
+            }
+            catch (AssertionException e)
+            {
+                verificationErrors.Append(e.Message);
+            }*/
+
+            //LogOut(globaluser.UserFullName);
+        }
+
+
+
+
+		 /*
+        /// <summary>
+        /// Класс для установки минимального и максимального времени ожиданиря в тесте
+        /// ***Жаль, что не плюсы
+        /// Помещенеие в деструктор возврата к максимальному ожиданию не гарантирует,
+        /// что деструктор вызовется при выходе из функции
+        /// К тому же, вложенный класс будет иметь доступ только к открытм статическим
+        /// либор надо наследовтаься от внешнего либо создавать объект внешнего класса внутри
+        /// </summary>
+        public class MinimalWait
+        {
+            public MinimalWait()
+            {
+                ;
+            }
+        }*/
+
+
+		int i = 0;
+                    Parallel.ForEach(GridTable,
+                    (curValue, loopstate) =>
+                    {
+                        lock ((object)i)
+                        {
+                            if (Row.GetSomeElement(driver, i + 1, column, GridTable.Count).Text.Equals(match))
+                            {
+                                loopstate.Stop();
+                                Row.GetCheckBox(driver, i + 1).Click();
+                                IsSelected = true;
+                                return;
+                            }
+                            ++i;
+                        }
+                    });
+
+
+					foreach(IWebElement e in GridTable)
+                    {
+                        if (e.Text != "")
+                        {
+                            var h = e.FindElement(By.XPath("//td[" + column.ToString() + "]/div"));
+                            string le = e.Text;
+                            if (le.Equals(match))
+                            {
+                                e.FindElement(By.XPath("//td/span")).Click();
+                                IsSelected = true;
+                                return;
+                            }
+                        }
+                    }             

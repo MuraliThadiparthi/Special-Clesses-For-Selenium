@@ -1,0 +1,155 @@
+﻿ //Assert.AreEqual("\"№ Заказ 1 (РТТ 1) от 06.08.2013\" класса \"Заказы поставщикам\" (код 1103)", Driver.Title);
+            //Driver.FindElement(By.CssSelector("span.obj-view-log.btn-view-log")).Click();
+
+            /*IWebElement element = Driver.FindElement(By.CssSelector("span.obj-view-log.btn-view-log"));
+            Actions actions = new Actions(Driver);
+            actions.MoveToElement(element).Perform();
+            Assert.That(element.Enabled);
+            //AssertThat(element.IsEnabled());
+            element.Click();*/
+
+            //((IJavaScriptExecutor)(Driver)).ExecuteScript("document.getElementsByTagName('span.obj-view-log.btn-view-log')[0].click();");
+            //((IJavaScriptExecutor)Driver).ExecuteScript("$('.card-history-menu').hover();");
+            //((IJavaScriptExecutor)Driver).ExecuteScript("$('span.obj-view-log.btn-view-log').mouseenter();"); 
+            //Driver.FindElement(By.CssSelector("span.obj-view-log.btn-view-log")).Click();
+            //System.Threading.Thread.Sleep(4000);
+            //Driver.FindElement(By.LinkText("Журнал")).Click();
+
+//            ((IJavaScriptExecutor)Driver).ExecuteScript("$('.card-history-menu').hover();");
+
+            /*IJavaScriptExecutor js = (IJavaScriptExecutor)Driver;
+            js.ExecuteScript("return document.title");*/
+
+            IJavaScriptExecutor js = (IJavaScriptExecutor)Driver;
+            js.ExecuteScript("return document.title", null);
+
+            IWebElement el = Driver.FindElement(By.CssSelector("span.obj-view-log.btn-view-log"));
+            Actions actions = new Actions(Driver);
+            //actions.MoveToElement(el).Perform();
+
+
+            string script = "return arguments[0];";
+            double d = 15.009;
+            float f = 13.2f;
+            decimal dec = 0.2m;
+            int i = 8;
+            //object value = ((IJavaScriptExecutor)Driver).ExecuteScript(script, new object[] { dec });
+            
+            IJavaScriptExecutor js1 = Driver as IJavaScriptExecutor;
+            string title = (string)js1.ExecuteScript("return document.title", el);
+            
+            IJavaScriptExecutor js2 = (IJavaScriptExecutor)Driver;
+            js2.ExecuteScript("alert(1);");
+
+            ((IJavaScriptExecutor)Driver).ExecuteScript("alert(1);");
+            ((IJavaScriptExecutor)Driver).ExecuteScript("$('.btn-view-log').click();");
+
+			//Assert.AreEqual("\"№ Заказ 1 (РТТ 1) от 06.08.2013\" класса \"Заказы поставщикам\" (код 1103)", driver.Title);
+            /*for (int second = 0; ; second++)
+            {
+                if (second >= 60) Assert.Fail("timeout");
+                try
+                {
+                    if (IsElementPresent(By.CssSelector("span.obj-view-log.btn-view-log"))) break;
+                }
+                catch (Exception)
+                { }
+                Thread.Sleep(1000);
+            }
+            Driver.FindElement(By.CssSelector("span.obj-view-log.btn-view-log")).Click();
+            Driver.FindElement(By.CssSelector("span.t-icon.t-close")).Click();*/
+
+
+            /*IWebElement myElement =Driver.FindElement(By.CssSelector("span.obj-view-log.btn-view-log"));
+            Actions builder = new Actions(Driver);
+            builder.MoveToElement(myElement).Build().Perform();
+            Thread.Sleep(4000);*/
+            /*ILocatable hoverItem = (ILocatable)Driver.FindElement(By.CssSelector("span.obj-view-log.btn-view-log"));
+            IMouse mouse = ((IHasInputDevices) Driver).GetMouse();
+            mouse.MouseMove(hoverItem.GetCoordinates());*/
+
+
+
+
+
+
+
+
+
+			//Thread.Sleep(4000);
+            /*((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].style.visibility = 'visible';", element);
+            ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].setAttribute(arguments[1], arguments[2])",
+                element, "style", "border: 2px solid yellow; color: yellow; font-weight: bold; visibility: visible; display: block; cssText: focus{color:red;}; a: hover{};");
+             * */
+           
+            
+            /*((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].setAttribute(arguments[1], arguments[2])",
+                element, "style", "border: 2px solid yellow; color: yellow; font-weight: bold; visibility: visible; display: block; cssText: focus{color:red;}; a:hover");*/
+            //Thread.Sleep(4000);
+            
+            
+            /*for (int second = 0; ; second++)
+            {
+                if (second >= 10) Assert.Fail("Время ожидания истекло.");
+                try
+                {
+                    if (element.Displayed) break;
+                }
+                catch (Exception)
+                { }
+                Thread.Sleep(1000);
+            }
+            element.Click();*/
+
+
+            //"style", "border: 2px solid yellow; color: yellow; font-weight: bold;"
+            //Thread.Sleep(4000);
+            /*if (!Driver.FindElement(By.CssSelector("span.obj-view-log.btn-view-log")).Displayed)
+                Assert.Fail("Элемент не видим.");*/
+            //((IJavaScriptExecutor)(Driver)).ExecuteScript("document.getElementsByClassName('span.obj-view-log.btn-view-log')[0].click();");
+            //((IJavaScriptExecutor)Driver).ExecuteScript("alert(1);");
+
+
+			SelectElement rr = new SelectElement(Driver.FindElement(By.CssSelector("span.obj-view-log.btn-view-log")));
+            rr.SelectByText("Журнал");
+
+
+
+
+
+
+			((IJavaScriptExecutor)Driver).ExecuteScript("$('span.obj-view-log.btn-view-log').trigger('mouseenter').trigger('click');");
+
+
+
+
+			((IJavaScriptExecutor)Driver).ExecuteScript("$('span.obj-view-log.btn-view-log').trigger('mouseenter').trigger('click');");
+
+
+
+
+
+			 By myElementLocator = By.id("myElementID");
+
+ WebDriverWait wait = new WebDriverWait(driver, 120);
+
+ // Canned wait example using By object as a parameter
+ wait.until(ExpectedConditions.invisibilityOfElementLocated(myElementLocator);
+
+ // Canned wait example using WebElement as a parameter
+ WebElement myElement = driver.findElement(myElementLocator)
+ wait.until(ExpectedConditions.stalenessOf(myElement);
+
+
+
+
+
+
+
+
+ //new string(strDll.ToCharArray().Reverse().ToArray());
+
+
+
+
+
